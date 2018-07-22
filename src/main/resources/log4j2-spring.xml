@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="60">
+    <Properties>
+        <Property name="log-path">/var/log/springBoot/logs</Property>
+    </Properties>
+    <CustomLevels>
+    <CustomLevel name="METRICS" intLevel="350" />
+    </CustomLevels>
+
+    <Appenders>
+        <Console name="Console-Appender" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+                </pattern>>
+            </PatternLayout>
+        </Console>
+
+        <RollingFile name="App-File-Appender" fileName="${log-path}/app.log" filePattern="${log-path}/app-%d{yyyy-MM-dd}-%i.log" >
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} %M - %msg%n
+                </pattern>
+            </PatternLayout>
+
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" />
+                <SizeBasedTriggeringPolicy size="50KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+
+
+        <RollingFile name="SpringBoot-File-Appender" fileName="${log-path}/springboot_log.log" filePattern="${log-path}/springboot_log-%d{yyyy-MM-dd}-%i.log" >
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1}- %msg%n
+                </pattern>
+            </PatternLayout>
+
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" />
+                <SizeBasedTriggeringPolicy size="50KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="Metrics-File-Appender" fileName="${log-path}/metrics.log" filePattern="${log-path}/metrics-%d{yyyy-MM-dd}-%i.log" >
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} %M - %msg%n
+                </pattern>
+            </PatternLayout>
+
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" />
+                <SizeBasedTriggeringPolicy size="50KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+
+        <Root level="info">
+            <AppenderRef ref="Console-Appender"/>
+        </Root>
+
+        <Logger name="com.springBoot" level="debug" additivity="false">
+            <AppenderRef ref="SpringBoot-File-Appender"/>
+            <AppenderRef ref="Console-Appender"/>
+        </Logger>
+
+        <Logger name="com.springBoot.resource"  level="debug" additivity="false">
+            <AppenderRef ref="App-File-Appender"/>
+            <AppenderRef ref="Console-Appender"/>
+        </Logger>
+
+        <Logger name="com.springBoot.resource" level="metrics" additivity="false">
+            <AppenderRef ref="Metrics-File-Appender"/>
+        </Logger>
+
+
+    </Loggers>
+</Configuration>
+
+
